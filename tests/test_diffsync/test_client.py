@@ -1,24 +1,24 @@
-from synchro import Client
+from synchro import DSClient
 from helpers import diff
 
 import pytest
 
 
 class TestClientInit:
-    """Test the __init__ method of the Client class"""
+    """Test the __init__ method of the DSClient class"""
 
     def test_defaults(self):
         """Test the default configuration and parameters"""
-        c = Client(1, "to be or not to be", [0, 0])
+        c = DSClient(1, "to be or not to be", [0, 0])
         assert c.id == 1
 
 
-class TestClientMain:
-    """Test the main methods of the Client class"""
+class TestDSClientMain:
+    """Test the main methods of the DSClient class"""
 
     def test_commit_once(self):
         """Test the commit method during normal operation"""
-        c = Client(1, "hy there", [0, 0])
+        c = DSClient(1, "hy there", [0, 0])
 
         commit = c.commit("hi there")
         diff_data = diff("hy there", "hi there")
@@ -35,7 +35,7 @@ class TestClientMain:
         Test when multiple commits are sent without a server response, usually
         due to a timeout
         """
-        c = Client(1, "thrust the time of your life", [0, 0])
+        c = DSClient(1, "thrust the time of your life", [0, 0])
 
         commit1 = c.commit("trust the time of your life")
         diff1 = diff("thrust the time of your life", "trust the time of your life")
@@ -56,7 +56,7 @@ class TestClientMain:
         """
         Test the update function of the client
         """
-        c = Client(1, "Yet Another Markup Language", [0, 0])
+        c = DSClient(1, "Yet Another Markup Language", [0, 0])
 
         commit = c.commit("Yaml Ain't a Markup Language")
         c.update(
@@ -70,6 +70,6 @@ class TestClientMain:
 
     def test_set_data(self):
         """Try setting the data for a client and ensure that you can't do so"""
-        c = Client(1, "What is your favorite food?", [0, 0])
+        c = DSClient(1, "What is your favorite food?", [0, 0])
         with pytest.raises(AttributeError):
             c.data = "What is your favorite color?"

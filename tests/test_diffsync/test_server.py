@@ -1,22 +1,22 @@
-from synchro import Server
+from synchro import DSServer
 
 from helpers import diff, patch
 
 
 class TestServerInit:
     """
-    Test the __init__ function of the Server class
+    Test the __init__ function of the DSServer class
     """
 
     def test_defaults(self):
         """Test the __init__ function with default arguments"""
-        s = Server()
+        s = DSServer()
         assert s.data == ""
 
     def test_custom_data(self):
         """Test the __init__ function with a custom data argument"""
         data = "cats and dogs"
-        s = Server(data)
+        s = DSServer(data)
         assert s.data == data
 
     def test_custom_diff_func(self):
@@ -25,7 +25,7 @@ class TestServerInit:
         def data(doc1, doc2):
             pass
 
-        s = Server(diff=data)
+        s = DSServer(diff=data)
         assert s._diff is data
 
     def test_custom_patch_func(self):
@@ -34,19 +34,19 @@ class TestServerInit:
         def data(patch, doc):
             pass
 
-        s = Server(patch=data)
+        s = DSServer(patch=data)
         assert s._patch is data
 
 
 class TestServerMain:
     """
-    Test the connection, receive and receive_a functions of Server
+    Test the connection, receive and receive_a functions of DSServer
     """
 
     def test_connection(self):
         """Test the connection function"""
         data = "flying cows"
-        s = Server(data)
+        s = DSServer(data)
         conn = s.connection()
         result = {
             "id": 1,
@@ -59,7 +59,7 @@ class TestServerMain:
         Test the receive function under normal operation by simulating normal
         communication between two clients and a server
         """
-        s = Server("i like to eet fud.", diff=diff, patch=patch)
+        s = DSServer("i like to eet fud.", diff=diff, patch=patch)
         c1 = s.connection()
         c2 = s.connection()
 
@@ -108,7 +108,7 @@ class TestServerMain:
         Test the receive function under the circumstances that the client's data
         was never received by the server
         """
-        s = Server("i like to eet fud.", diff=diff, patch=patch)
+        s = DSServer("i like to eet fud.", diff=diff, patch=patch)
         c1 = s.connection()
 
         # as the connection keeps timing out, the edit stack becomes bigger,
@@ -135,7 +135,7 @@ class TestServerMain:
         Test the receive function under the circumstances that the server's data
         was never received by the client
         """
-        s = Server("i like to eet fud.", diff=diff, patch=patch)
+        s = DSServer("i like to eet fud.", diff=diff, patch=patch)
         c1 = s.connection()
 
         # the client sends a successful response to the server. However, the
@@ -160,7 +160,7 @@ class TestServerMain:
 
 class TestServerCleanup:
     """
-    Test the Server cleanup functions responsible for removing clients and
+    Test the DSServer cleanup functions responsible for removing clients and
     reseting the client group
     """
 
@@ -169,13 +169,13 @@ class TestServerCleanup:
         Test the close_connection method responsible for removing a client
         by id
         """
-        s = Server()
+        s = DSServer()
         c = s.connection()
         assert s.close_connection(c["id"]) == c["id"] and s._clients == set()
 
     def test_reset(self):
         """Test the reset method that clears all connections"""
-        s = Server()
+        s = DSServer()
         c = s.connection()
         c1 = s.connection()
         assert s.reset() == {c["id"], c1["id"]} and s._clients == set()

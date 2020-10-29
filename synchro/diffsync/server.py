@@ -1,14 +1,14 @@
 from itertools import filterfalse, count
 
 from .shadow import Shadow, ServerShadow
-from .diffs import diff as default_diff
-from .diffs import patch as default_patch
-from .exceptions import SyncError
+from ..diffs import diff as default_diff
+from ..diffs import patch as default_patch
+from ..exceptions import SyncError
 
 from copy import deepcopy
 
 
-class Server:
+class DSServer:
     def __init__(self, data=None, diff=default_diff, patch=default_patch):
         if data is None:
             self.data = ""
@@ -102,7 +102,7 @@ class Server:
         return next(filterfalse(self._clients.__contains__, count(1)))
 
     def __str__(self):
-        return "Server"
+        return "DSServer"
 
     def __repr__(self):
         return f"<{self.__str__()}>"

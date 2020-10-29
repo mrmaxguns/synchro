@@ -1,4 +1,4 @@
-from .exceptions import SyncError
+from ..exceptions import SyncError
 
 
 class ServerBackupShadow:

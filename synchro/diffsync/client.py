@@ -1,11 +1,11 @@
 from .shadow import Shadow
-from .diffs import diff as default_diff
-from .diffs import patch as default_patch
+from ..diffs import diff as default_diff
+from ..diffs import patch as default_patch
 
 from copy import deepcopy
 
 
-class Client:
+class DSClient:
     def __init__(self, id, data, version, diff=default_diff, patch=default_patch):
         self.id = id
         self._data = data
@@ -63,4 +63,4 @@ class Client:
         return str(self.id)
 
     def __repr__(self):
-        return f"<Client {self.__str__()}>"
+        return f"<DSClient {self.__str__()}>"
